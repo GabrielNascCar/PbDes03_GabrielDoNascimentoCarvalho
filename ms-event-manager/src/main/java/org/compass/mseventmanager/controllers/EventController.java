@@ -5,10 +5,7 @@ import org.compass.mseventmanager.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/events")
@@ -21,6 +18,12 @@ public class EventController {
     public ResponseEntity<Event> create(@RequestBody Event event) {
         Event event1 = eventService.createEvent(event);
         return ResponseEntity.status(HttpStatus.CREATED).body(event1);
+    }
+
+    @GetMapping("/get-event/{id}")
+    public ResponseEntity<Event> getEvent(@PathVariable String id) {
+        Event event = eventService.getEventById(id);
+        return ResponseEntity.ok(event);
     }
 
 }
