@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(value = "ms-event-manager", url = "http://localhost:8082", path = "/events")
 public interface TicketResource {
 
-    @GetMapping("/get-ticket/{id}")
+    @GetMapping("/get-event/{id}")
     ResponseEntity<Event> getEvent(@PathVariable String id);
 }
