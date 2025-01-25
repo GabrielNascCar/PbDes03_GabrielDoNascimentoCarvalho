@@ -25,4 +25,11 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public Event updateEvent(String id, Event event) {
+        Event event1 = getEventById(id);
+        event1.setEventName(event.getEventName());
+        event1.setDateTime(event.getDateTime());
+        return eventRepository.save(event1);
+    }
+
 }
