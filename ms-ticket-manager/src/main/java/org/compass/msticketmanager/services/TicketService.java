@@ -26,6 +26,11 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    @Transactional
+    public Ticket getTicket(String id) {
+        return ticketRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Ticket not found for the ID " + id));
+    }
 
     public EventData getEventData(String eventId) {
 
