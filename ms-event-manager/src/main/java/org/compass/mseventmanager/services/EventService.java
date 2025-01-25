@@ -5,6 +5,8 @@ import org.compass.mseventmanager.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EventService {
 
@@ -17,6 +19,10 @@ public class EventService {
 
     public Event getEventById(String id) {
         return eventRepository.findById(id).get();
+    }
+
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
     }
 
 }
