@@ -46,4 +46,10 @@ public class EventController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/get-all-events/sorted")
+    public ResponseEntity<List<Event>> getAllEventsSorted() {
+        List<Event> events = eventService.getAllEventsSorted();
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
 }

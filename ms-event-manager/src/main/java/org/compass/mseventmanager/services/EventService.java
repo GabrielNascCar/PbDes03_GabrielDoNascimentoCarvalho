@@ -5,6 +5,7 @@ import org.compass.mseventmanager.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -34,6 +35,12 @@ public class EventService {
 
     public void deleteEvent(String id) {
         eventRepository.deleteById(id);
+    }
+
+    public List<Event> getAllEventsSorted() {
+        List<Event> events = eventRepository.findAll();
+        events.sort(Comparator.comparing(Event::getEventName));
+        return events;
     }
 
 }
