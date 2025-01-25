@@ -22,9 +22,8 @@ public class TicketController {
 
         EventData eventData = ticketService.getEventData(ticket.getEventId());
 
-        TicketDTO ticketDTO = new TicketDTO(eventData, ticket);
+        TicketDTO ticketDTO = new TicketDTO(eventData, ticketService.createTicket(ticket));
 
-        ticketService.createTicket(ticket);
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketDTO);
     }
 
