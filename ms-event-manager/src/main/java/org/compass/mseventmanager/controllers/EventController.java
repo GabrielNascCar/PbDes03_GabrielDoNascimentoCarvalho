@@ -40,4 +40,10 @@ public class EventController {
         return ResponseEntity.ok(updatedEvent);
     }
 
+    @DeleteMapping("/delete-event/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        eventService.deleteEvent(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
