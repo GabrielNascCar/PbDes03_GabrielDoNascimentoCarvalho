@@ -50,6 +50,18 @@ public class TicketService {
         ticketRepository.save(ticket);
     }
 
+    @Transactional
+    public void cancelTicketsByCpf(String cpf) {
+        List<Ticket> tickets = ticketRepository.findByCpfAndStatus(cpf, "Completed");
+        if (tickets.isEmpty()) {
+            throw new RuntimeException("No tickets found for CPF: " + cpf);
+        }
+        for (Ticket ticket : tickets) {
+            ticket.setStatus("Deleted");
+        }
+        ticketRepository.saveAll(tickets);
+    }
+
     public EventData getEventData(String eventId) {
 
         ResponseEntity<Event> eventData = ticketResource.getEvent(eventId);

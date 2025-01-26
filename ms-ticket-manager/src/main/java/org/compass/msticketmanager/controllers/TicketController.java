@@ -56,4 +56,10 @@ public class TicketController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/cancel-tickets/{cpf}")
+    public ResponseEntity<Void> cancelTicketsByCpf(@PathVariable String cpf) {
+        ticketService.cancelTicketsByCpf(cpf);
+        return ResponseEntity.noContent().build();
+    }
+
 }
