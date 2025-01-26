@@ -1,4 +1,4 @@
-package org.compass.msticketmanager.infra.ticket;
+package org.compass.msticketmanager.infra;
 
 import org.compass.msticketmanager.model.Event;
 import org.springframework.cloud.openfeign.FeignClient;
