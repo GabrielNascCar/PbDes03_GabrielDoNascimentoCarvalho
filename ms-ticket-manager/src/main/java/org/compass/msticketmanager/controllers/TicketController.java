@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/tickets")
 public class TicketController {
@@ -31,6 +33,15 @@ public class TicketController {
     public ResponseEntity<Ticket> getTicket(@PathVariable String id) {
         Ticket ticket = ticketService.getTicket(id);
         return ResponseEntity.ok(ticket);
+    }
+
+    @GetMapping("/get-ticket-by-cpf/{cpf}")
+    public ResponseEntity<List<Ticket>> getTicketByCpf(@PathVariable String cpf) {
+        List<Ticket> tickets = ticketService.getTicketsByCpf(cpf);
+        if (tickets.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tickets);
     }
 
 }

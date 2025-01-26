@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class TicketService {
 
@@ -30,6 +32,10 @@ public class TicketService {
     public Ticket getTicket(String id) {
         return ticketRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Ticket not found for the ID " + id));
+    }
+
+    public List<Ticket> getTicketsByCpf(String cpf) {
+        return ticketRepository.findByCpf(cpf);
     }
 
     public EventData getEventData(String eventId) {
