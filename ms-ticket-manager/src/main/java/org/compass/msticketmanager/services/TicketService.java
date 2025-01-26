@@ -2,7 +2,7 @@ package org.compass.msticketmanager.services;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.compass.msticketmanager.infra.ticket.TicketResource;
+import org.compass.msticketmanager.infra.EventFeignClient;
 import org.compass.msticketmanager.model.Event;
 import org.compass.msticketmanager.model.EventData;
 import org.compass.msticketmanager.model.Ticket;
@@ -21,7 +21,7 @@ public class TicketService {
     private TicketRepository ticketRepository;
 
     @Autowired
-    private TicketResource ticketResource;
+    private EventFeignClient eventFeignClient;
 
     @Transactional
     public Ticket createTicket(Ticket ticket) throws JsonProcessingException {
@@ -64,7 +64,7 @@ public class TicketService {
 
     public EventData getEventData(String eventId) {
 
-        ResponseEntity<Event> eventData = ticketResource.getEvent(eventId);
+        ResponseEntity<Event> eventData = eventFeignClient.getEvent(eventId);
 
         Event event = eventData.getBody();
 
