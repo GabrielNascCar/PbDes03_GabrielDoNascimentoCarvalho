@@ -44,4 +44,10 @@ public class TicketController {
         return ResponseEntity.ok(tickets);
     }
 
+    @GetMapping("/check-tickets-by-event/{eventId}")
+    public ResponseEntity<List<Ticket>> getTicketsByEvent(@PathVariable String eventId) {
+        List<Ticket> tickets = ticketService.findTicketByEventId(eventId);
+        return ResponseEntity.ok(tickets);
+    }
+
 }

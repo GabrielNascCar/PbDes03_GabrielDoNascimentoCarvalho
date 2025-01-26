@@ -38,6 +38,10 @@ public class TicketService {
         return ticketRepository.findByCpf(cpf);
     }
 
+    public List<Ticket> findTicketByEventId(String eventId) {
+        return ticketRepository.findByEventId(eventId);
+    }
+
     public EventData getEventData(String eventId) {
 
         ResponseEntity<Event> eventData = ticketResource.getEvent(eventId);
