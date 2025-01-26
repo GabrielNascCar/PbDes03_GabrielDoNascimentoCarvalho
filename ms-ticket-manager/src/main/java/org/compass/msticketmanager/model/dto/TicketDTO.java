@@ -28,6 +28,6 @@ public class TicketDTO {
         this.customerMail = ticket.getCustomerMail();
         this.BRLtotalAmount = ticket.getBRLamount();
         this.USDtotalAmount = ticket.getUSDamount();
-        this.status = "Concluido";
+        this.status = ticket.getStatus();
     }
 }
