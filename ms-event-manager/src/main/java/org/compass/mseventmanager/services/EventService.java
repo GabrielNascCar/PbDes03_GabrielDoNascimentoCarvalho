@@ -1,6 +1,8 @@
 package org.compass.mseventmanager.services;
 
+import org.compass.mseventmanager.infra.TicketFeignClient;
 import org.compass.mseventmanager.model.Event;
+import org.compass.mseventmanager.model.Ticket;
 import org.compass.mseventmanager.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private TicketFeignClient ticketFeignClient;
 
     public Event createEvent(Event event) {
         return eventRepository.save(event);
@@ -34,6 +39,16 @@ public class EventService {
     }
 
     public void deleteEvent(String id) {
+
+        List<Ticket> tickets = ticketFeignClient.getTicketsByEvent(id);
+
+        if (!tickets.isEmpty()) {
+            throw new RuntimeException("Cannot delete event. Tickets have been sold.");
+        }
+
+        Event event = eventRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Event not found for ID: " + id));
+
         eventRepository.deleteById(id);
     }
 
