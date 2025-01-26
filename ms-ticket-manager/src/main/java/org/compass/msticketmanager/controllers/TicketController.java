@@ -50,4 +50,10 @@ public class TicketController {
         return ResponseEntity.ok(tickets);
     }
 
+    @DeleteMapping("/cancel-ticket/{ticketId}")
+    public ResponseEntity<Void> cancelTicket(@PathVariable String ticketId) {
+        ticketService.cancelTicket(ticketId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

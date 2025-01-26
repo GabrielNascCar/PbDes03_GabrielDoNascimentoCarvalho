@@ -30,16 +30,24 @@ public class TicketService {
 
     @Transactional
     public Ticket getTicket(String id) {
-        return ticketRepository.findById(id).orElseThrow(() ->
+        return ticketRepository.findByTicketIdAndStatus(id, "Completed").orElseThrow(() ->
                 new RuntimeException("Ticket not found for the ID " + id));
     }
 
     public List<Ticket> getTicketsByCpf(String cpf) {
-        return ticketRepository.findByCpf(cpf);
+        return ticketRepository.findByCpfAndStatus(cpf, "Completed");
     }
 
     public List<Ticket> findTicketByEventId(String eventId) {
-        return ticketRepository.findByEventId(eventId);
+        return ticketRepository.findByEventIdAndStatus(eventId, "Completed");
+    }
+
+    @Transactional
+    public void cancelTicket(String ticketId) {
+        Ticket ticket = ticketRepository.findByTicketIdAndStatus(ticketId, "Completed")
+                .orElseThrow(() -> new RuntimeException("Ticket not found for ID: " + ticketId));
+        ticket.setStatus("Deleted");
+        ticketRepository.save(ticket);
     }
 
     public EventData getEventData(String eventId) {

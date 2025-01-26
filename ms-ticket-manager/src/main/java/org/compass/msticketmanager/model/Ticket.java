@@ -25,4 +25,5 @@ public class Ticket {
     private String BRLamount;
     @JsonDeserialize(using = StringDeserializer.class)
     private String USDamount;
+    private String status = "Completed";
 }
