@@ -1,5 +1,6 @@
 package org.compass.mseventmanager.services;
 
+import org.compass.mseventmanager.exceptions.EventDeletionException;
 import org.compass.mseventmanager.infra.TicketFeignClient;
 import org.compass.mseventmanager.infra.ZipCodeClient;
 import org.compass.mseventmanager.model.Address;
@@ -61,7 +62,7 @@ public class EventService {
         List<Ticket> tickets = ticketFeignClient.getTicketsByEvent(id);
 
         if (!tickets.isEmpty()) {
-            throw new RuntimeException("Cannot delete event. Tickets have been sold.");
+            throw new EventDeletionException("Cannot delete event. Tickets have been sold.");
         }
 
         Event event = eventRepository.findById(id).orElseThrow(() ->
