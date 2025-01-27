@@ -4,6 +4,7 @@ package org.compass.msticketmanager.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import org.compass.msticketmanager.exceptions.EventNotFoundException;
+import org.compass.msticketmanager.exceptions.TicketNotFoundException;
 import org.compass.msticketmanager.infra.EventFeignClient;
 import org.compass.msticketmanager.model.Event;
 import org.compass.msticketmanager.model.EventData;
@@ -46,7 +47,7 @@ public class TicketService {
     @Transactional
     public Ticket getTicket(String id) {
         return ticketRepository.findByTicketIdAndStatus(id, "Completed").orElseThrow(() ->
-                new RuntimeException("Ticket not found for the ID " + id));
+                new TicketNotFoundException("Ticket not found for the ID " + id));
     }
 
     public List<Ticket> getTicketsByCpf(String cpf) {

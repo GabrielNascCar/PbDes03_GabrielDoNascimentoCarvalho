@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 
     }
+
+    @ExceptionHandler(TicketNotFoundException.class)
+    public ResponseEntity<String> handleTicketNotFoundException(TicketNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
 }
