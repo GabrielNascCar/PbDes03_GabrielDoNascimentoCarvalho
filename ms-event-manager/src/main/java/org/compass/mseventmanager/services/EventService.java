@@ -1,6 +1,7 @@
 package org.compass.mseventmanager.services;
 
 import org.compass.mseventmanager.exceptions.EventDeletionException;
+import org.compass.mseventmanager.exceptions.EventNotFoundException;
 import org.compass.mseventmanager.infra.TicketFeignClient;
 import org.compass.mseventmanager.infra.ZipCodeClient;
 import org.compass.mseventmanager.model.Address;
@@ -43,7 +44,7 @@ public class EventService {
     }
 
     public Event getEventById(String id) {
-        return eventRepository.findById(id).get();
+        return eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException("Event not found for ID: " + id));
     }
 
     public List<Event> getAllEvents() {
@@ -59,14 +60,15 @@ public class EventService {
 
     public void deleteEvent(String id) {
 
+        getEventById(id);
+//        eventRepository.findById(id).orElseThrow(() ->
+//                new EventNotFoundException("Event not found for ID: " + id));
+
         List<Ticket> tickets = ticketFeignClient.getTicketsByEvent(id);
 
         if (!tickets.isEmpty()) {
             throw new EventDeletionException("Cannot delete event. Tickets have been sold.");
         }
-
-        Event event = eventRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Event not found for ID: " + id));
 
         eventRepository.deleteById(id);
     }
