@@ -61,8 +61,6 @@ public class EventService {
     public void deleteEvent(String id) {
 
         getEventById(id);
-//        eventRepository.findById(id).orElseThrow(() ->
-//                new EventNotFoundException("Event not found for ID: " + id));
 
         List<Ticket> tickets = ticketFeignClient.getTicketsByEvent(id);
 
