@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.compass.msticketmanager.infra.EventFeignClient;
 import org.compass.msticketmanager.model.Event;
 import org.compass.msticketmanager.model.EventData;
+import org.compass.msticketmanager.model.Message;
 import org.compass.msticketmanager.model.Ticket;
 import org.compass.msticketmanager.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,13 @@ public class TicketService {
     @Autowired
     private EventFeignClient eventFeignClient;
 
+    @Autowired
+    private SendMail sendMail;
+
     @Transactional
     public Ticket createTicket(Ticket ticket) throws JsonProcessingException {
+        Message message = new Message(ticket.getCustomerMail(), ticket.getCustomerName(), ticket.getEventName());
+        sendMail.send(message);
         return ticketRepository.save(ticket);
     }
 
