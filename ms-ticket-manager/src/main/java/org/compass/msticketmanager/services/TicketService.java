@@ -2,11 +2,14 @@ package org.compass.msticketmanager.services;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import feign.FeignException;
+import org.compass.msticketmanager.exceptions.EventNotFoundException;
 import org.compass.msticketmanager.infra.EventFeignClient;
 import org.compass.msticketmanager.model.Event;
 import org.compass.msticketmanager.model.EventData;
 import org.compass.msticketmanager.model.Message;
 import org.compass.msticketmanager.model.Ticket;
+import org.compass.msticketmanager.model.dto.TicketDTO;
 import org.compass.msticketmanager.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +31,16 @@ public class TicketService {
     private SendMail sendMail;
 
     @Transactional
-    public Ticket createTicket(Ticket ticket) throws JsonProcessingException {
-        Message message = new Message(ticket.getCustomerMail(), ticket.getCustomerName(), ticket.getEventName());
-        sendMail.send(message);
-        return ticketRepository.save(ticket);
+    public TicketDTO createTicket(Ticket ticket) throws JsonProcessingException {
+        try {
+            EventData eventData = getEventData(ticket.getEventId());
+            TicketDTO ticketDTO = new TicketDTO(eventData, ticketRepository.save(ticket));
+            Message message = new Message(ticket.getCustomerMail(), ticket.getCustomerName(), ticket.getEventName());
+            sendMail.send(message);
+            return ticketDTO;
+        } catch (FeignException e) {
+            throw new EventNotFoundException("Event not found for ID: " + ticket.getEventId());
+        }
     }
 
     @Transactional
