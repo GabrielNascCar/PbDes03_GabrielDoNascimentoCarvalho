@@ -49,6 +49,15 @@ public class TicketService {
     }
 
     @Transactional
+    public Ticket updateTicket(String id, Ticket ticket) {
+        Ticket t = getTicket(id);
+        t.setCpf(ticket.getCpf());
+        t.setCustomerMail(ticket.getCustomerMail());
+        t.setCustomerName(ticket.getCustomerName());
+        return ticketRepository.save(t);
+    }
+
+    @Transactional
     public void cancelTicket(String ticketId) {
         Ticket ticket = ticketRepository.findByTicketIdAndStatus(ticketId, "Completed")
                 .orElseThrow(() -> new RuntimeException("Ticket not found for ID: " + ticketId));
