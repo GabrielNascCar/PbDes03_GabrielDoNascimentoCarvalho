@@ -1,6 +1,8 @@
 package org.compass.mseventmanager.services;
 
 import org.compass.mseventmanager.infra.TicketFeignClient;
+import org.compass.mseventmanager.infra.ZipCodeClient;
+import org.compass.mseventmanager.model.Address;
 import org.compass.mseventmanager.model.Event;
 import org.compass.mseventmanager.model.Ticket;
 import org.compass.mseventmanager.repositories.EventRepository;
@@ -19,7 +21,23 @@ public class EventService {
     @Autowired
     private TicketFeignClient ticketFeignClient;
 
+    @Autowired
+    private ZipCodeClient zipCodeClient;
+
     public Event createEvent(Event event) {
+
+        if(event.getCep() != null) {
+            Address address = zipCodeClient.getAddress(event.getCep());
+
+            if(address != null) {
+                event.setUf(address.getUf());
+                event.setCidade(event.getCidade());
+                event.setBairro(event.getBairro());
+                event.setLogradouro(event.getLogradouro());
+            }
+
+        }
+
         return eventRepository.save(event);
     }
 
