@@ -31,9 +31,9 @@ public class EventService {
 
             if(address != null) {
                 event.setUf(address.getUf());
-                event.setCidade(event.getCidade());
-                event.setBairro(event.getBairro());
-                event.setLogradouro(event.getLogradouro());
+                event.setCidade(address.getLocalidade());
+                event.setBairro(address.getBairro());
+                event.setLogradouro(address.getLogradouro());
             }
 
         }
