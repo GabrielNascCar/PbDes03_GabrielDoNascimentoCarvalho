@@ -22,9 +22,7 @@ public class TicketController {
     @PostMapping("/create-ticket")
     public ResponseEntity<TicketDTO> createTicket(@RequestBody Ticket ticket) throws JsonProcessingException {
 
-        EventData eventData = ticketService.getEventData(ticket.getEventId());
-
-        TicketDTO ticketDTO = new TicketDTO(eventData, ticketService.createTicket(ticket));
+        TicketDTO ticketDTO = ticketService.createTicket(ticket);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketDTO);
     }
