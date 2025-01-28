@@ -1,6 +1,8 @@
 package org.compass.msticketmanager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import feign.FeignException;
+import org.compass.msticketmanager.exceptions.EventNotFoundException;
 import org.compass.msticketmanager.infra.EventFeignClient;
 import org.compass.msticketmanager.model.Event;
 import org.compass.msticketmanager.model.Message;
@@ -167,6 +169,18 @@ public class TicketServiceTest {
 
         tickets.forEach(ticket -> assertEquals("Deleted", ticket.getStatus()));
         verify(ticketRepository, times(1)).saveAll(tickets);
+    }
+
+    @Test
+    public void testCreateTicket_EventNotFound() {
+        Ticket ticket = new Ticket();
+        ticket.setEventId("invalid-event-id");
+
+        when(eventFeignClient.getEvent(anyString())).thenThrow(FeignException.NotFound.class);
+
+        assertThrows(EventNotFoundException.class, () -> {
+            ticketService.createTicket(ticket);
+        });
     }
 
 }
