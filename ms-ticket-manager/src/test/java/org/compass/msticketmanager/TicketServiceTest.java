@@ -85,4 +85,28 @@ public class TicketServiceTest {
         verify(ticketRepository, times(1)).findByTicketIdAndStatus("1", "Completed");
     }
 
+    @Test
+    void testUpdateTicket() {
+        Ticket existingTicket = new Ticket();
+        existingTicket.setTicketId("1");
+        existingTicket.setStatus("Completed");
+
+        Ticket updatedTicket = new Ticket();
+        updatedTicket.setCpf("12345678900");
+        updatedTicket.setCustomerMail("gabriel@gmail.com");
+        updatedTicket.setCustomerName("gabriel nascimento");
+
+        when(ticketRepository.findByTicketIdAndStatus("1", "Completed"))
+                .thenReturn(Optional.of(existingTicket));
+        when(ticketRepository.save(any(Ticket.class))).thenReturn(existingTicket);
+
+        Ticket result = ticketService.updateTicket("1", updatedTicket);
+
+        assertNotNull(result);
+        assertEquals("12345678900", result.getCpf());
+        assertEquals("gabriel@gmail.com", result.getCustomerMail());
+        assertEquals("gabriel nascimento", result.getCustomerName());
+        verify(ticketRepository, times(1)).save(existingTicket);
+    }
+
 }
