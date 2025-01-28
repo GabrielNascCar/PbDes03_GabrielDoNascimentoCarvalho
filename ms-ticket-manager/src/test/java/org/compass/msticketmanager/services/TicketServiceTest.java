@@ -1,4 +1,4 @@
-package org.compass.msticketmanager;
+package org.compass.msticketmanager.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
@@ -9,8 +9,6 @@ import org.compass.msticketmanager.model.Message;
 import org.compass.msticketmanager.model.Ticket;
 import org.compass.msticketmanager.model.dto.TicketDTO;
 import org.compass.msticketmanager.repositories.TicketRepository;
-import org.compass.msticketmanager.services.SendMail;
-import org.compass.msticketmanager.services.TicketService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
