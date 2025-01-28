@@ -154,4 +154,19 @@ public class TicketServiceTest {
         verify(ticketRepository, times(1)).save(ticket);
     }
 
+    @Test
+    void testCancelTicketsByCpf() {
+        List<Ticket> tickets = Arrays.asList(new Ticket(), new Ticket());
+        tickets.get(0).setStatus("Completed");
+        tickets.get(1).setStatus("Completed");
+
+        when(ticketRepository.findByCpfAndStatus("12345678900", "Completed"))
+                .thenReturn(tickets);
+
+        ticketService.cancelTicketsByCpf("12345678900");
+
+        tickets.forEach(ticket -> assertEquals("Deleted", ticket.getStatus()));
+        verify(ticketRepository, times(1)).saveAll(tickets);
+    }
+
 }
