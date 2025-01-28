@@ -125,4 +125,18 @@ public class TicketServiceTest {
         verify(ticketRepository, times(1)).findByCpfAndStatus("12345678900", "Completed");
     }
 
+    @Test
+    void testFindTicketByEventId() {
+        List<Ticket> tickets = Arrays.asList(new Ticket(), new Ticket());
+
+        when(ticketRepository.findByEventIdAndStatus("1", "Completed"))
+                .thenReturn(tickets);
+
+        List<Ticket> result = ticketService.findTicketByEventId("1");
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(ticketRepository, times(1)).findByEventIdAndStatus("1", "Completed");
+    }
+
 }
