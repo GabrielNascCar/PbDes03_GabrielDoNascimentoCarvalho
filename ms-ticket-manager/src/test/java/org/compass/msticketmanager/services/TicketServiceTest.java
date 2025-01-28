@@ -3,6 +3,7 @@ package org.compass.msticketmanager.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import org.compass.msticketmanager.exceptions.EventNotFoundException;
+import org.compass.msticketmanager.exceptions.TicketNotFoundException;
 import org.compass.msticketmanager.infra.EventFeignClient;
 import org.compass.msticketmanager.model.Event;
 import org.compass.msticketmanager.model.Message;
@@ -178,6 +179,17 @@ public class TicketServiceTest {
 
         assertThrows(EventNotFoundException.class, () -> {
             ticketService.createTicket(ticket);
+        });
+    }
+
+    @Test
+    public void testGetTicket_TicketNotFound() {
+        String ticketId = "invalid-ticket-id";
+
+        when(ticketRepository.findByTicketIdAndStatus(ticketId, "Completed")).thenReturn(Optional.empty());
+
+        assertThrows(TicketNotFoundException.class, () -> {
+            ticketService.getTicket(ticketId);
         });
     }
 
