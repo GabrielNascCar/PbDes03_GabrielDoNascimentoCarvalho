@@ -139,4 +139,19 @@ public class TicketServiceTest {
         verify(ticketRepository, times(1)).findByEventIdAndStatus("1", "Completed");
     }
 
+    @Test
+    void testCancelTicket() {
+        Ticket ticket = new Ticket();
+        ticket.setTicketId("1");
+        ticket.setStatus("Completed");
+
+        when(ticketRepository.findByTicketIdAndStatus("1", "Completed"))
+                .thenReturn(Optional.of(ticket));
+
+        ticketService.cancelTicket("1");
+
+        assertEquals("Deleted", ticket.getStatus());
+        verify(ticketRepository, times(1)).save(ticket);
+    }
+
 }
