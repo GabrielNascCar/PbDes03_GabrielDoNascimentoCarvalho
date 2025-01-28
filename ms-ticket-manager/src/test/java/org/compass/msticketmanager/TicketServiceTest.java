@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,6 +109,20 @@ public class TicketServiceTest {
         assertEquals("gabriel@gmail.com", result.getCustomerMail());
         assertEquals("gabriel nascimento", result.getCustomerName());
         verify(ticketRepository, times(1)).save(existingTicket);
+    }
+
+    @Test
+    void testGetTicketsByCpf() {
+        List<Ticket> tickets = Arrays.asList(new Ticket(), new Ticket());
+
+        when(ticketRepository.findByCpfAndStatus("12345678900", "Completed"))
+                .thenReturn(tickets);
+
+        List<Ticket> result = ticketService.getTicketsByCpf("12345678900");
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(ticketRepository, times(1)).findByCpfAndStatus("12345678900", "Completed");
     }
 
 }
