@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,4 +68,21 @@ public class TicketServiceTest {
         verify(ticketRepository, times(1)).save(ticket);
         verify(sendMail, times(1)).send(any(Message.class));
     }
+
+    @Test
+    void testGetTicket() {
+        Ticket ticket = new Ticket();
+        ticket.setTicketId("1");
+        ticket.setStatus("Completed");
+
+        when(ticketRepository.findByTicketIdAndStatus("1", "Completed"))
+                .thenReturn(Optional.of(ticket));
+
+        Ticket result = ticketService.getTicket("1");
+
+        assertNotNull(result);
+        assertEquals("1", result.getTicketId());
+        verify(ticketRepository, times(1)).findByTicketIdAndStatus("1", "Completed");
+    }
+
 }
