@@ -1,10 +1,12 @@
 package org.compass.mseventmanager.services;
 
+import org.compass.mseventmanager.exceptions.EventDeletionException;
 import org.compass.mseventmanager.exceptions.EventNotFoundException;
 import org.compass.mseventmanager.infra.TicketFeignClient;
 import org.compass.mseventmanager.infra.ZipCodeClient;
 import org.compass.mseventmanager.model.Address;
 import org.compass.mseventmanager.model.Event;
+import org.compass.mseventmanager.model.Ticket;
 import org.compass.mseventmanager.repositories.EventRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -124,6 +126,19 @@ public class EventServiceTest {
         eventService.deleteEvent("1");
 
         verify(eventRepository, times(1)).deleteById("1");
+    }
+
+    @Test
+    void testDeleteEvent_TicketsSold() {
+        Event event = new Event();
+        event.setId("1");
+
+        when(eventRepository.findById("1")).thenReturn(Optional.of(event));
+        when(ticketFeignClient.getTicketsByEvent("1")).thenReturn(Arrays.asList(new Ticket()));
+
+        assertThrows(EventDeletionException.class, () -> {
+            eventService.deleteEvent("1");
+        });
     }
 
 }
