@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -90,6 +91,26 @@ public class EventServiceTest {
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(eventRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testUpdateEvent() {
+        Event existingEvent = new Event();
+        existingEvent.setId("1");
+        existingEvent.setEventName("Show");
+
+        Event updatedEvent = new Event();
+        updatedEvent.setEventName("Event");
+        updatedEvent.setDateTime(LocalDateTime.now());
+
+        when(eventRepository.findById("1")).thenReturn(Optional.of(existingEvent));
+        when(eventRepository.save(any(Event.class))).thenReturn(existingEvent);
+
+        Event result = eventService.updateEvent("1", updatedEvent);
+
+        assertNotNull(result);
+        assertEquals("Event", result.getEventName());
+        verify(eventRepository, times(1)).save(existingEvent);
     }
 
 }
