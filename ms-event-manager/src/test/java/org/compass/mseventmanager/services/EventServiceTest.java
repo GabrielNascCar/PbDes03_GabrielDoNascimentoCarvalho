@@ -113,4 +113,17 @@ public class EventServiceTest {
         verify(eventRepository, times(1)).save(existingEvent);
     }
 
+    @Test
+    void testDeleteEvent() {
+        Event event = new Event();
+        event.setId("1");
+
+        when(eventRepository.findById("1")).thenReturn(Optional.of(event));
+        when(ticketFeignClient.getTicketsByEvent("1")).thenReturn(Arrays.asList());
+
+        eventService.deleteEvent("1");
+
+        verify(eventRepository, times(1)).deleteById("1");
+    }
+
 }
