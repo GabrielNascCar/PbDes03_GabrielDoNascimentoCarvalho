@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,6 +77,19 @@ public class EventServiceTest {
         assertThrows(EventNotFoundException.class, () -> {
             eventService.getEventById("1");
         });
+    }
+
+    @Test
+    void testGetAllEvents() {
+        List<Event> events = Arrays.asList(new Event(), new Event());
+
+        when(eventRepository.findAll()).thenReturn(events);
+
+        List<Event> result = eventService.getAllEvents();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(eventRepository, times(1)).findAll();
     }
 
 }
