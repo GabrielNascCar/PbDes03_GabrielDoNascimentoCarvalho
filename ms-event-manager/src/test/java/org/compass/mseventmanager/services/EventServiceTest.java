@@ -141,4 +141,24 @@ public class EventServiceTest {
         });
     }
 
+    @Test
+    void testGetAllEventsSorted() {
+        Event event1 = new Event();
+        event1.setEventName("B Event");
+
+        Event event2 = new Event();
+        event2.setEventName("A Event");
+
+        List<Event> events = Arrays.asList(event1, event2);
+
+        when(eventRepository.findAll()).thenReturn(events);
+
+        List<Event> result = eventService.getAllEventsSorted();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("A Event", result.get(0).getEventName());
+        verify(eventRepository, times(1)).findAll();
+    }
+
 }
