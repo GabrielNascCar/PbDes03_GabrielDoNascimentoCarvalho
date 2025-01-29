@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -50,4 +52,19 @@ public class EventServiceTest {
         assertEquals("São Paulo", result.getCidade());
         verify(eventRepository, times(1)).save(event);
     }
+
+    @Test
+    void testGetEventById() {
+        Event event = new Event();
+        event.setId("1");
+
+        when(eventRepository.findById("1")).thenReturn(Optional.of(event));
+
+        Event result = eventService.getEventById("1");
+
+        assertNotNull(result);
+        assertEquals("1", result.getId());
+        verify(eventRepository, times(1)).findById("1");
+    }
+
 }
