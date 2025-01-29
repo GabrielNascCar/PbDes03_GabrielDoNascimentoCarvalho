@@ -1,5 +1,6 @@
 package org.compass.mseventmanager.services;
 
+import org.compass.mseventmanager.exceptions.EventNotFoundException;
 import org.compass.mseventmanager.infra.TicketFeignClient;
 import org.compass.mseventmanager.infra.ZipCodeClient;
 import org.compass.mseventmanager.model.Address;
@@ -65,6 +66,15 @@ public class EventServiceTest {
         assertNotNull(result);
         assertEquals("1", result.getId());
         verify(eventRepository, times(1)).findById("1");
+    }
+
+    @Test
+    void testGetEventById_NotFound() {
+        when(eventRepository.findById("1")).thenReturn(Optional.empty());
+
+        assertThrows(EventNotFoundException.class, () -> {
+            eventService.getEventById("1");
+        });
     }
 
 }
