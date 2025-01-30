@@ -1,9 +1,21 @@
 spring:
+  application:
+    name: ms-ticket-manager
+  web:
+    locale-resolver: fixed
+    locale: en
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
+      database: DB_ticket
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${SPRING_RABBITMQ_HOST}
+    port: ${SPRING_RABBITMQ_PORT}
+    username: ${SPRING_RABBITMQ_USERNAME}
+    password: ${SPRING_RABBITMQ_PASSWORD}
+
+server:
+  port: 8083
 
 mq:
   queues:

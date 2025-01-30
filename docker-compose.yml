@@ -24,6 +24,19 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://admin:admin@mongo-event:27017/DB_event?authSource=admin
       - TICKET=http://ms-ticket-manager:8083
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672" 
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
+
   ms-ticket-manager:
     build: ./ms-ticket-manager
     container_name: ms-ticket-manager
@@ -33,6 +46,11 @@ services:
     depends_on:
       - ms-event-manager
       - mongo-event
+      - rabbitmq
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://admin:admin@mongo-event:27017/DB_ticket?authSource=admin
       - EVENT=http://ms-event-manager:8082
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
