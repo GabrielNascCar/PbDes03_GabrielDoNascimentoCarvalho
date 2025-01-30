@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  mongo-event:
+    image: mongo
+    container_name: mongo-event
+    restart: always
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - ./data/mongo-event:/data/db
+
+  ms-event-manager:
+    build: ./ms-event-manager
+    container_name: ms-event-manager
+    restart: always
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongo-event
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:admin@mongo-event:27017/DB_event?authSource=admin
+      - TICKET=http://ms-ticket-manager:8083
+
+  ms-ticket-manager:
+    build: ./ms-ticket-manager
+    container_name: ms-ticket-manager
+    restart: always
+    ports:
+      - "8083:8083"
+    depends_on:
+      - ms-event-manager
+      - mongo-event
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:admin@mongo-event:27017/DB_ticket?authSource=admin
+      - EVENT=http://ms-event-manager:8082

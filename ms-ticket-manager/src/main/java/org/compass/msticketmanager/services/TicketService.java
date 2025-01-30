@@ -37,7 +37,7 @@ public class TicketService {
             EventData eventData = getEventData(ticket.getEventId());
             TicketDTO ticketDTO = new TicketDTO(eventData, ticketRepository.save(ticket));
             Message message = new Message(ticket.getCustomerMail(), ticket.getCustomerName(), ticket.getEventName());
-            sendMail.send(message);
+
             return ticketDTO;
         } catch (FeignException e) {
             throw new EventNotFoundException("Event not found for ID: " + ticket.getEventId());

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "ms-event-manager", url = "http://localhost:8082", path = "/events")
+@FeignClient(value = "ms-event-manager", url = "${event.service.url}", path = "/events")
 public interface EventFeignClient {
 
     @GetMapping("/get-event/{id}")

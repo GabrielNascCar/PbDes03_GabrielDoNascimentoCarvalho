@@ -8,3 +8,7 @@ spring:
 mq:
   queues:
     notificacao: notificacao
+
+event:
+  service:
+    url: ${EVENT}

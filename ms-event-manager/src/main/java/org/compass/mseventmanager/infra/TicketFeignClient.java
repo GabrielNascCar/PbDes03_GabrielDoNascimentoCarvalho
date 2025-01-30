@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(value = "ms-ticket-manager", url = "http://localhost:8083", path = "/tickets")
+@FeignClient(value = "ms-ticket-manager", url = "${ticket.service.uri}", path = "/tickets")
 public interface TicketFeignClient {
 
     @GetMapping("/check-tickets-by-event/{eventId}")
